@@ -35,6 +35,11 @@ ActiveRecord::Schema.define(version: 2020_05_27_222644) do
   create_table "videos", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "title"
+    t.string "overview"
+    t.string "release_date"
+    t.integer "total_inventory"
+    t.integer "available_inventory"
   end
 
 end
