@@ -30,8 +30,6 @@ class RentalsController < ApplicationController
       @customer.increment_checked_out_count # for customer
       @video.decrement_available_inventory # for video
 
-
-      # TODO
       render json: {
         customer_id: rental.customer_id,
         video_id: rental.video_id,
@@ -64,7 +62,6 @@ class RentalsController < ApplicationController
       @customer.decrement_checked_out_count # for customer
       @video.increment_available_inventory # for video
 
-      # TODO
       render json: {
         customer_id: rental.customer_id,
         video_id: rental.video_id,

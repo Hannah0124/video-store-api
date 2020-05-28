@@ -15,8 +15,6 @@ describe VideosController do
       # Act
       get videos_path
   
-      # Get the body of the response 
-      # as an array or hash
       body = JSON.parse(response.body)
   
       # Assert 
@@ -35,8 +33,6 @@ describe VideosController do
       # Act
       get videos_path
   
-      # Get the body of the response 
-      # as an array or hash
       body = JSON.parse(response.body)
   
       # Assert 
@@ -55,7 +51,7 @@ describe VideosController do
       get video_path(video.id)
 
       # Assert 
-      must_respond_with :success # :ok is fine too
+      must_respond_with :success
 
       body = JSON.parse(response.body)
 
@@ -71,7 +67,6 @@ describe VideosController do
       must_respond_with :not_found 
       body = JSON.parse(response.body) 
       expect(body).must_be_instance_of Hash 
-      # expect(body['ok']).must_equal false # TODO
       expect(body['errors']).must_include 'Not Found'
     end
   end
@@ -93,8 +88,6 @@ describe VideosController do
       }.must_differ "Video.count", 1
 
       must_respond_with :created
-
-      # check_response(expected_type: Hash, expected_status: :created)
     end
 
     it "will respond with bad_request for invalid data" do
@@ -112,12 +105,9 @@ describe VideosController do
 
       expect(response.header['Content-Type']).must_include 'json'
       body = JSON.parse(response.body)
-
-      # body = check_response(expected_type: Hash, expected_status: :bad_request)
       
       expect(body["errors"].keys).must_include "title"
       expect(body["errors"].keys).must_include "total_inventory"
     end
   end
-
 end
