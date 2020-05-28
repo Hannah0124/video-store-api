@@ -18,7 +18,7 @@ describe RentalsController do
       }
     }
 
-    it "can let a customer check out" do 
+    it "can enables a customer to check out" do 
       # Arrange
       inventory_nums = video.available_inventory 
       checked_out_video_nums = customer.videos_checked_out_count 
@@ -43,7 +43,8 @@ describe RentalsController do
       expect(Customer.find(customer.id).videos_checked_out_count).must_equal checked_out_video_nums + 1
     end
 
-    it "cannot checkout if given an invalid video_id" do 
+
+    it "a customer cannot checkout if given an invalid video_id" do 
 
       rental_data[:video_id] = -1
 
@@ -61,7 +62,7 @@ describe RentalsController do
       expect(Customer.find(customer.id).videos_checked_out_count).must_equal checked_out_video_nums
     end
 
-    it "cannot checkout if given an invalid customer_id" do 
+    it "a customer cannot checkout if given an invalid customer_id" do 
 
       rental_data[:customer_id] = -1
 
@@ -79,7 +80,7 @@ describe RentalsController do
       expect(Video.find(video.id).available_inventory).must_equal inventory_nums
     end
 
-    it "cannot checkout if video inventory is 0" do 
+    it "a customer cannot checkout if video inventory is 0" do 
       video_us = videos(:us)
 
       new_rental_params = {
@@ -125,7 +126,7 @@ describe RentalsController do
       post check_out_path, params: rental_params
     end
 
-    it "can let a customer check in" do  
+    it "can enables a customer to check in" do  
 
       # Arrange
       inventory_nums = video.available_inventory 
@@ -153,7 +154,7 @@ describe RentalsController do
       expect(Customer.find(customer.id).videos_checked_out_count).must_equal checked_out_video_nums
     end
 
-    it "cannot check in if given an invalid video_id" do  
+    it "a customer cannot check in if given an invalid video_id" do  
 
       # Arrange
       rental_params[:video_id] = -1
@@ -167,7 +168,7 @@ describe RentalsController do
       expect(response.header['Content-Type']).must_include 'json'
     end
 
-    it "cannot check in if given an invalid customer_id" do  
+    it "a customer cannot check in if given an invalid customer_id" do  
 
       # Arrange
       rental_params[:customer_id] = -1
