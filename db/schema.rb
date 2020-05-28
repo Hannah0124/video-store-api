@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_28_003303) do
+ActiveRecord::Schema.define(version: 2020_05_28_023630) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 2020_05_28_003303) do
     t.string "state"
     t.string "postal_code"
     t.string "phone"
-    t.integer "video_checkout_count", default: 0
+    t.integer "videos_checked_out_count", default: 0
   end
 
   create_table "rentals", force: :cascade do |t|

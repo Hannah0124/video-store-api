@@ -3,11 +3,11 @@ class Customer < ApplicationRecord
   has_many :rentals
 
   def as_json(options = {})
-    options[:methods] = [:videos_checkout_count]
+    options[:methods] = [:videos_checked_out_count]
     super
   end
 
-  def videos_checkout_count
+  def videos_checked_out_count
     return 0
   end 
 end

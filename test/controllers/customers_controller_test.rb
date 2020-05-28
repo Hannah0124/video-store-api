@@ -1,6 +1,6 @@
 require "test_helper"
 
-CUSTOMER_FIELDS = ["id", "name", "registered_at", "postal_code", "phone", "videos_checkout_count"].sort
+CUSTOMER_FIELDS = ["id", "name", "registered_at", "postal_code", "phone", "videos_checked_out_count"].sort
 
 describe CustomersController do
 
