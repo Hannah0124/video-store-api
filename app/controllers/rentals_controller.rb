@@ -1,17 +1,9 @@
 class RentalsController < ApplicationController
-
-  def index
-    rental = Rental.all.order(:id) 
-
-    render json: { ok: 'Yes'}, status: :ok 
-  end 
+  before_action :find_video_and_customer, only: [:check_out, :check_in]
 
   def check_out 
-    video = Video.find_by(id: params[:video_id])
-    customer = Customer.find_by(id: params[:customer_id])
-
     
-    if video.nil? || customer.nil? 
+    if @video.nil? || @customer.nil? 
       render json: {
         errors: ['Not Found'],
       }, status: :not_found 
@@ -19,8 +11,7 @@ class RentalsController < ApplicationController
       return 
     end 
 
-
-    if video.available_inventory <= 0
+    if @video.available_inventory <= 0
 
       render json: {
         ok: false,
@@ -32,29 +23,22 @@ class RentalsController < ApplicationController
 
 
     rental = Rental.new(rental_params)
-    rental.check_out_date = Date.today
-    rental.due_date = Date.today + 7
+    rental.update_check_out_dates # check_out and due_date
+
 
     if rental.save 
-      video.available_inventory -= 1 
-      video.save
+      @customer.increment_checked_out_count # for customer
+      @video.decrement_available_inventory # for video
 
-      customer.videos_checked_out_count += 1
-      customer.save 
 
-    
-      # render json: rental.as_json(
-      # only: [:id, :due_date]), 
-      # status: :ok
-
+      # TODO
       render json: {
         customer_id: rental.customer_id,
         video_id: rental.video_id,
         due_date: rental.due_date,
-        videos_checked_out_count: customer.videos_checked_out_count,
-        available_inventory: video.available_inventory
+        videos_checked_out_count: @customer.videos_checked_out_count,
+        available_inventory: @video.available_inventory
       },
-      # only: [:id, :due_date]), 
       status: :ok
 
       return
@@ -62,9 +46,47 @@ class RentalsController < ApplicationController
     end
   end
 
+  def check_in 
+    if @video.nil? || @customer.nil? 
+      render json: {
+        errors: ['Not Found'],
+      }, status: :not_found 
+
+      return 
+    end 
+
+    rental = Rental.find_by(rental_params)
+    rental.update_check_in_date 
+
+
+    if rental.save 
+
+      @customer.decrement_checked_out_count # for customer
+      @video.increment_available_inventory # for video
+
+      # TODO
+      render json: {
+        customer_id: rental.customer_id,
+        video_id: rental.video_id,
+        videos_checked_out_count: @customer.videos_checked_out_count,
+        available_inventory: @video.available_inventory
+      },
+      status: :ok
+
+      return
+
+    end
+
+  end 
+
   private
 
   def rental_params
     params.permit(:customer_id, :video_id)
+  end
+
+  def find_video_and_customer 
+    @video = Video.find_by(id: params[:video_id])
+    @customer = Customer.find_by(id: params[:customer_id])
   end
 end
