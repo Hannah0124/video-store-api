@@ -13,7 +13,6 @@ class CustomersController < ApplicationController
         :videos_checked_out_count
       ]), 
       status: :ok
-
       return 
   end
 end
